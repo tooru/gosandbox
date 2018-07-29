@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"reflect"
 )
 
 const nMessages = 6
@@ -77,14 +78,19 @@ func call(ctx context.Context, src chan string, dst1 chan string, dst2 chan stri
 		if !ok {
 			return nil
 		}
-		var outputs = []chan string{dst1, dst2, dst3}
+		var channels = []chan string{dst1, dst2, dst3}
+		var cases = make([]reflect.SelectCase, len(channels))
 
-		for _, dst := range outputs {
-			select {
-			case <-ctx.Done():
-				return ctx.Err()
-			case dst <- data:
+		for i, ch := range channels {
+			cases[i] = reflect.SelectCase{
+				Chan: reflect.ValueOf(ch),
+				Dir:  reflect.SelectSend,
+				Send: reflect.ValueOf(data),
 			}
+		}
+		for len(cases) > 0 {
+			chosen, _, _ := reflect.Select(cases)
+			cases = append(cases[:chosen], cases[chosen+1:]...)
 		}
 	}
 }
