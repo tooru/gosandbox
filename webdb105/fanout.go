@@ -77,12 +77,14 @@ func call(ctx context.Context, src chan string, dst1 chan string, dst2 chan stri
 		if !ok {
 			return nil
 		}
-		select {
-		case <-ctx.Done():
-			return ctx.Err()
-		case dst1 <- data:
-		case dst2 <- data:
-		case dst3 <- data:
+		for sent := 0; sent < 3; sent++ {
+			select {
+			case <-ctx.Done():
+				return ctx.Err()
+			case dst1 <- data:
+			case dst2 <- data:
+			case dst3 <- data:
+			}
 		}
 	}
 }
