@@ -9,13 +9,13 @@ import (
 
 const nMessages = 6
 
-func fanout(message string, propagate func(context.Context, <-chan string, chan<- string, chan<- string, chan<- string) error) {
+func fanout(message string, dsts [3]chan string, propagate func(context.Context, <-chan string, [3]chan<- string) error) {
 	fmt.Printf("%s:\n", message)
 
 	var src = make(chan string)
-	var dst1 = make(chan string)
-	var dst2 = make(chan string)
-	var dst3 = make(chan string)
+	var dst1 = dsts[0]
+	var dst2 = dsts[1]
+	var dst3 = dsts[2]
 	var done = make(chan interface{})
 
 	go func() {
@@ -65,7 +65,7 @@ func fanout(message string, propagate func(context.Context, <-chan string, chan<
 		cancel()
 	}()
 
-	err := propagate(ctx, src, dst1, dst2, dst3)
+	err := propagate(ctx, src, [3]chan<- string{dst1, dst2, dst3})
 	if err != nil {
 		panic(err)
 	}
@@ -78,7 +78,7 @@ func fanout(message string, propagate func(context.Context, <-chan string, chan<
 	}
 }
 
-func propagateSingle(ctx context.Context, src <-chan string, dst1 chan<- string, dst2 chan<- string, dst3 chan<- string) error {
+func propagateSingle(ctx context.Context, src <-chan string, dsts [3]chan<- string) error {
 	for {
 		data, ok := <-src
 		if !ok {
@@ -88,13 +88,13 @@ func propagateSingle(ctx context.Context, src <-chan string, dst1 chan<- string,
 		select {
 		case <-ctx.Done():
 			return ctx.Err()
-		case dst1 <- data:
-		case dst2 <- data:
-		case dst3 <- data:
+		case dsts[0] <- data:
+		case dsts[1] <- data:
+		case dsts[2] <- data:
 		}
 	}
 }
-func propagateMulti(ctx context.Context, src <-chan string, dst1 chan<- string, dst2 chan<- string, dst3 chan<- string) error {
+func propagateMulti(ctx context.Context, src <-chan string, dsts [3]chan<- string) error {
 	for {
 		data, ok := <-src
 		if !ok {
@@ -105,22 +105,21 @@ func propagateMulti(ctx context.Context, src <-chan string, dst1 chan<- string, 
 			select {
 			case <-ctx.Done():
 				return ctx.Err()
-			case dst1 <- data:
-			case dst2 <- data:
-			case dst3 <- data:
+			case dsts[0] <- data:
+			case dsts[1] <- data:
+			case dsts[2] <- data:
 			}
 		}
 	}
 }
-func propagateMultiByLoop(ctx context.Context, src <-chan string, dst1 chan<- string, dst2 chan<- string, dst3 chan<- string) error {
+func propagateMultiByLoop(ctx context.Context, src <-chan string, dsts [3]chan<- string) error {
 	for {
 		data, ok := <-src
 		if !ok {
 			return nil
 		}
-		var channels = []chan<- string{dst1, dst2, dst3}
 
-		for _, ch := range channels {
+		for _, ch := range dsts {
 			select {
 			case <-ctx.Done():
 				return ctx.Err()
@@ -129,17 +128,16 @@ func propagateMultiByLoop(ctx context.Context, src <-chan string, dst1 chan<- st
 		}
 	}
 }
-func propagateMultiByReflection(ctx context.Context, src <-chan string, dst1 chan<- string, dst2 chan<- string, dst3 chan<- string) error {
+func propagateMultiByReflection(ctx context.Context, src <-chan string, dsts [3]chan<- string) error {
 	for {
 		data, ok := <-src
 		if !ok {
 			return nil
 		}
-		var channels = []chan<- string{dst1, dst2, dst3}
 
-		var cases = make([]reflect.SelectCase, len(channels))
+		var cases = make([]reflect.SelectCase, len(dsts))
 
-		for i, ch := range channels {
+		for i, ch := range dsts {
 			cases[i] = reflect.SelectCase{
 				Chan: reflect.ValueOf(ch),
 				Dir:  reflect.SelectSend,
@@ -153,9 +151,18 @@ func propagateMultiByReflection(ctx context.Context, src <-chan string, dst1 cha
 	}
 }
 
+func newChannels(cap int) [3]chan string {
+	var res [3]chan string
+	for i := 0; i < len(res); i++ {
+		res[i] = make(chan string, cap)
+	}
+	return res
+}
+
 func main() {
-	fanout("propagateSingle", propagateSingle)
-	fanout("propagateMulti", propagateMulti)
-	fanout("propagateMultiByLoop", propagateMultiByLoop)
-	fanout("propagateMultiByReflection", propagateMultiByReflection)
+	fanout("propagateSingle", newChannels(0), propagateSingle)
+	fanout("propagateMulti", newChannels(0), propagateMulti)
+	fanout("propagateMultiByLoop", newChannels(0), propagateMultiByLoop)
+	fanout("propagateMultiByReflection", newChannels(0), propagateMultiByReflection)
+	fanout("propagateMultiByLoopWithCapacity", newChannels(5), propagateMultiByLoop)
 }
