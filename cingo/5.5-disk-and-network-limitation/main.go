@@ -46,27 +46,33 @@ func Per(eventCount int, duration time.Duration) rate.Limit {
 }
 
 func Open() *APIConnection {
-	secondLimit := rate.NewLimiter(Per(2, time.Second), 1)
-	minuteLimit := rate.NewLimiter(Per(10, time.Minute), 10)
-
 	return &APIConnection{
-		rateLimiter: MultiLimiter(secondLimit, minuteLimit),
+		apiLimit: MultiLimiter(
+			rate.NewLimiter(Per(2, time.Second), 2),
+			rate.NewLimiter(Per(10, time.Minute), 10)),
+		diskLimit: MultiLimiter(
+			rate.NewLimiter(rate.Limit(1), 1)),
+		networkLimit: MultiLimiter(
+			rate.NewLimiter(Per(3, time.Second), 3),
+		),
 	}
 }
 
 type APIConnection struct {
-	rateLimiter RateLimiter
+	networkLimit,
+	diskLimit,
+	apiLimit RateLimiter
 }
 
 func (a *APIConnection) ReadFile(ctx context.Context) error {
-	if err := a.rateLimiter.Wait(ctx); err != nil {
+	if err := MultiLimiter(a.apiLimit, a.diskLimit).Wait(ctx); err != nil {
 		return err
 	}
 	return nil
 }
 
 func (a *APIConnection) ResolveAddress(ctx context.Context) error {
-	if err := a.rateLimiter.Wait(ctx); err != nil {
+	if err := MultiLimiter(a.apiLimit, a.networkLimit).Wait(ctx); err != nil {
 		return err
 	}
 	return nil
@@ -85,22 +91,22 @@ func main() {
 	for i := 0; i < 10; i++ {
 		go func() {
 			defer wg.Done()
-			err := apiConnection.ReadFile(context.Background())
+			err := apiConnection.ResolveAddress(context.Background())
 			if err != nil {
-				log.Printf("cannot ReadFile: %v", err)
+				log.Printf("cannot ResolveAddress: %v", err)
 			}
-			log.Printf("ReadFile")
+			log.Printf("ResolveAddress")
 		}()
 	}
 
 	for i := 0; i < 10; i++ {
 		go func() {
 			defer wg.Done()
-			err := apiConnection.ResolveAddress(context.Background())
+			err := apiConnection.ReadFile(context.Background())
 			if err != nil {
-				log.Printf("cannot ResolveAddress: %v", err)
+				log.Printf("cannot ReadFile: %v", err)
 			}
-			log.Printf("ResolveAddress")
+			log.Printf("ReadFile")
 		}()
 	}
 
