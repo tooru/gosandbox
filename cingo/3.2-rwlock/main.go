@@ -15,7 +15,7 @@ func main() {
 		for i := 5; i > 0; i-- {
 			l.Lock()
 			l.Unlock()
-			time.Sleep(1) // ❷
+			time.Sleep(2) // ❷
 		}
 	}
 	observer := func(wg *sync.WaitGroup, l sync.Locker) {
@@ -39,7 +39,7 @@ func main() {
 	defer tw.Flush()
 	var m sync.RWMutex
 	fmt.Fprintf(tw, "Readers\tRWMutext\tMutex\n")
-	for i := 0; i < 20; i++ {
+	for i := 0; i < 23; i++ {
 		count := int(math.Pow(2, float64(i)))
 		fmt.Fprintf(
 			tw,
