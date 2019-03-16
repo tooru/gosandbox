@@ -1,0 +1,687 @@
+generating SSA for fusedMulAdd
+buildssa-enter
+.   AS l(3)
+.   .   NAME-example.~r3 a(true) g(1) l(3) x(24) class(PPARAMOUT) float64
+buildssa-body
+.   RETURN l(4) tc(1)
+.   RETURN-list
+.   .   AS l(4) tc(1)
+.   .   .   NAME-example.~r3 a(true) g(1) l(3) x(24) class(PPARAMOUT) float64
+.   .   .   ADD l(4) tc(1) float64
+.   .   .   .   MUL l(4) tc(1) float64
+.   .   .   .   .   NAME-example.a a(true) g(2) l(3) x(0) class(PPARAM) tc(1) used float64
+.   .   .   .   .   NAME-example.c a(true) g(4) l(3) x(16) class(PPARAM) tc(1) used float64
+.   .   .   .   NAME-example.b a(true) g(3) l(3) x(8) class(PPARAM) tc(1) used float64
+buildssa-exit
+compiling fusedMulAdd
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v3 = SB <uintptr> DEAD
+    v4 = LocalAddr <*float64> {a} v2 v1 DEAD
+    v5 = LocalAddr <*float64> {b} v2 v1 DEAD
+    v6 = LocalAddr <*float64> {c} v2 v1 DEAD
+    v7 = LocalAddr <*float64> {~r3} v2 v1
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v11 = Const64F <float64> [0] DEAD
+    v12 = Mul64F <float64> v8 v10
+    v13 = Add64F <float64> v12 v9
+    v14 = VarDef <mem> {~r3} v1
+    v15 = Store <mem> {float64} v7 v13 v14
+    Ret v15
+  pass number lines begin
+  pass number lines end [11492 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v3 = SB <uintptr> DEAD
+    v4 = LocalAddr <*float64> {a} v2 v1 DEAD
+    v5 = LocalAddr <*float64> {b} v2 v1 DEAD
+    v6 = LocalAddr <*float64> {c} v2 v1 DEAD
+    v7 = LocalAddr <*float64> {~r3} v2 v1
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v11 = Const64F <float64> [0] DEAD
+    v12 = Mul64F <float64> v8 v10
+    v13 = Add64F <float64> v12 v9
+    v14 = VarDef <mem> {~r3} v1
+    v15 = Store <mem> {float64} v7 v13 v14
+    Ret v15
+  pass early phielim begin
+  pass early phielim end [1505 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v3 = SB <uintptr> DEAD
+    v4 = LocalAddr <*float64> {a} v2 v1 DEAD
+    v5 = LocalAddr <*float64> {b} v2 v1 DEAD
+    v6 = LocalAddr <*float64> {c} v2 v1 DEAD
+    v7 = LocalAddr <*float64> {~r3} v2 v1
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v11 = Const64F <float64> [0] DEAD
+    v12 = Mul64F <float64> v8 v10
+    v13 = Add64F <float64> v12 v9
+    v14 = VarDef <mem> {~r3} v1
+    v15 = Store <mem> {float64} v7 v13 v14
+    Ret v15
+  pass early copyelim begin
+  pass early copyelim end [1008 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v3 = SB <uintptr> DEAD
+    v4 = LocalAddr <*float64> {a} v2 v1 DEAD
+    v5 = LocalAddr <*float64> {b} v2 v1 DEAD
+    v6 = LocalAddr <*float64> {c} v2 v1 DEAD
+    v7 = LocalAddr <*float64> {~r3} v2 v1
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v11 = Const64F <float64> [0] DEAD
+    v12 = Mul64F <float64> v8 v10
+    v13 = Add64F <float64> v12 v9
+    v14 = VarDef <mem> {~r3} v1
+    v15 = Store <mem> {float64} v7 v13 v14
+    Ret v15
+  pass early deadcode begin
+  pass early deadcode end [10330 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v7 = LocalAddr <*float64> {~r3} v2 v1
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v12 = Mul64F <float64> v8 v10
+    v13 = Add64F <float64> v12 v9
+    v14 = VarDef <mem> {~r3} v1
+    v15 = Store <mem> {float64} v7 v13 v14
+    Ret v15
+  pass short circuit begin
+  pass short circuit end [7974 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v7 = LocalAddr <*float64> {~r3} v2 v1
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v12 = Mul64F <float64> v8 v10
+    v13 = Add64F <float64> v12 v9
+    v14 = VarDef <mem> {~r3} v1
+    v15 = Store <mem> {float64} v7 v13 v14
+    Ret v15
+  pass decompose user begin
+  pass decompose user end [531640 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v7 = LocalAddr <*float64> {~r3} v2 v1
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v12 = Mul64F <float64> v8 v10
+    v13 = Add64F <float64> v12 v9
+    v14 = VarDef <mem> {~r3} v1
+    v15 = Store <mem> {float64} v7 v13 v14
+    Ret v15
+  pass opt begin
+  pass opt end [3154826 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v7 = LocalAddr <*float64> {~r3} v2 v1
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v12 = Mul64F <float64> v8 v10
+    v13 = Add64F <float64> v12 v9
+    v14 = VarDef <mem> {~r3} v1
+    v15 = Store <mem> {float64} v7 v13 v14
+    Ret v15
+  pass zero arg cse begin
+  pass zero arg cse end [9708 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v7 = LocalAddr <*float64> {~r3} v2 v1
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v12 = Mul64F <float64> v8 v10
+    v13 = Add64F <float64> v12 v9
+    v14 = VarDef <mem> {~r3} v1
+    v15 = Store <mem> {float64} v7 v13 v14
+    Ret v15
+  pass opt deadcode begin
+  pass opt deadcode end [5225 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v7 = LocalAddr <*float64> {~r3} v2 v1
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v12 = Mul64F <float64> v8 v10
+    v13 = Add64F <float64> v12 v9
+    v14 = VarDef <mem> {~r3} v1
+    v15 = Store <mem> {float64} v7 v13 v14
+    Ret v15
+  pass generic cse begin
+  pass generic cse end [56570 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v7 = LocalAddr <*float64> {~r3} v2 v1
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v12 = Mul64F <float64> v8 v10
+    v13 = Add64F <float64> v12 v9
+    v14 = VarDef <mem> {~r3} v1
+    v15 = Store <mem> {float64} v7 v13 v14
+    Ret v15
+  pass phiopt begin
+  pass phiopt end [5072 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v7 = LocalAddr <*float64> {~r3} v2 v1
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v12 = Mul64F <float64> v8 v10
+    v13 = Add64F <float64> v12 v9
+    v14 = VarDef <mem> {~r3} v1
+    v15 = Store <mem> {float64} v7 v13 v14
+    Ret v15
+  pass nilcheckelim begin
+  pass nilcheckelim end [369960 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v7 = LocalAddr <*float64> {~r3} v2 v1
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v12 = Mul64F <float64> v8 v10
+    v13 = Add64F <float64> v12 v9
+    v14 = VarDef <mem> {~r3} v1
+    v15 = Store <mem> {float64} v7 v13 v14
+    Ret v15
+  pass prove begin
+  pass prove end [32928 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v7 = LocalAddr <*float64> {~r3} v2 v1
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v12 = Mul64F <float64> v8 v10
+    v13 = Add64F <float64> v12 v9
+    v14 = VarDef <mem> {~r3} v1
+    v15 = Store <mem> {float64} v7 v13 v14
+    Ret v15
+  pass decompose builtin begin
+  pass decompose builtin end [528544 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v7 = LocalAddr <*float64> {~r3} v2 v1
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v12 = Mul64F <float64> v8 v10
+    v13 = Add64F <float64> v12 v9
+    v14 = VarDef <mem> {~r3} v1
+    v15 = Store <mem> {float64} v7 v13 v14
+    Ret v15
+  pass softfloat begin
+  pass softfloat end [548 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v7 = LocalAddr <*float64> {~r3} v2 v1
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v12 = Mul64F <float64> v8 v10
+    v13 = Add64F <float64> v12 v9
+    v14 = VarDef <mem> {~r3} v1
+    v15 = Store <mem> {float64} v7 v13 v14
+    Ret v15
+  pass late opt begin
+  pass late opt end [6656 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v7 = LocalAddr <*float64> {~r3} v2 v1
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v12 = Mul64F <float64> v8 v10
+    v13 = Add64F <float64> v12 v9
+    v14 = VarDef <mem> {~r3} v1
+    v15 = Store <mem> {float64} v7 v13 v14
+    Ret v15
+  pass dead auto elim begin
+  pass dead auto elim end [15960 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v7 = LocalAddr <*float64> {~r3} v2 v1
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v12 = Mul64F <float64> v8 v10
+    v13 = Add64F <float64> v12 v9
+    v14 = VarDef <mem> {~r3} v1
+    v15 = Store <mem> {float64} v7 v13 v14
+    Ret v15
+  pass generic deadcode begin
+  pass generic deadcode end [4224 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v7 = LocalAddr <*float64> {~r3} v2 v1
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v12 = Mul64F <float64> v8 v10
+    v13 = Add64F <float64> v12 v9
+    v14 = VarDef <mem> {~r3} v1
+    v15 = Store <mem> {float64} v7 v13 v14
+    Ret v15
+  pass check bce begin
+  pass check bce end [400 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v7 = LocalAddr <*float64> {~r3} v2 v1
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v12 = Mul64F <float64> v8 v10
+    v13 = Add64F <float64> v12 v9
+    v14 = VarDef <mem> {~r3} v1
+    v15 = Store <mem> {float64} v7 v13 v14
+    Ret v15
+  pass branchelim begin
+  pass branchelim end [10130 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v7 = LocalAddr <*float64> {~r3} v2 v1
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v12 = Mul64F <float64> v8 v10
+    v13 = Add64F <float64> v12 v9
+    v14 = VarDef <mem> {~r3} v1
+    v15 = Store <mem> {float64} v7 v13 v14
+    Ret v15
+  pass fuse begin
+  pass fuse end [783 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v7 = LocalAddr <*float64> {~r3} v2 v1
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v12 = Mul64F <float64> v8 v10
+    v13 = Add64F <float64> v12 v9
+    v14 = VarDef <mem> {~r3} v1
+    v15 = Store <mem> {float64} v7 v13 v14
+    Ret v15
+  pass dse begin
+  pass dse end [14754 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v7 = LocalAddr <*float64> {~r3} v2 v1
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v12 = Mul64F <float64> v8 v10
+    v13 = Add64F <float64> v12 v9
+    v14 = VarDef <mem> {~r3} v1
+    v15 = Store <mem> {float64} v7 v13 v14
+    Ret v15
+  pass writebarrier begin
+  pass writebarrier end [6398 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v7 = LocalAddr <*float64> {~r3} v2 v1
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v12 = Mul64F <float64> v8 v10
+    v13 = Add64F <float64> v12 v9
+    v14 = VarDef <mem> {~r3} v1
+    v15 = Store <mem> {float64} v7 v13 v14
+    Ret v15
+  pass lower begin
+  pass lower end [5390175 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v7 = LEAQ <*float64> {~r3} v2 DEAD
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v12 = MULSD <float64> v8 v10 DEAD
+    v13 = FMASD <float64> v9 v8 v10
+    v14 = VarDef <mem> {~r3} v1
+    v15 = MOVSDstore <mem> {~r3} v2 v13 v14
+    Ret v15
+  pass lowered cse begin
+  pass lowered cse end [13847 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v7 = LEAQ <*float64> {~r3} v2 DEAD
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v12 = MULSD <float64> v8 v10 DEAD
+    v13 = FMASD <float64> v9 v8 v10
+    v14 = VarDef <mem> {~r3} v1
+    v15 = MOVSDstore <mem> {~r3} v2 v13 v14
+    Ret v15
+  pass elim unread autos begin
+  pass elim unread autos end [2043 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v7 = LEAQ <*float64> {~r3} v2 DEAD
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v12 = MULSD <float64> v8 v10 DEAD
+    v13 = FMASD <float64> v9 v8 v10
+    v14 = VarDef <mem> {~r3} v1
+    v15 = MOVSDstore <mem> {~r3} v2 v13 v14
+    Ret v15
+  pass lowered deadcode begin
+  pass lowered deadcode end [6742 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v13 = FMASD <float64> v9 v8 v10
+    v14 = VarDef <mem> {~r3} v1
+    v15 = MOVSDstore <mem> {~r3} v2 v13 v14
+    Ret v15
+  pass checkLower begin
+  pass checkLower end [804 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v13 = FMASD <float64> v9 v8 v10
+    v14 = VarDef <mem> {~r3} v1
+    v15 = MOVSDstore <mem> {~r3} v2 v13 v14
+    Ret v15
+  pass late phielim begin
+  pass late phielim end [734 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v13 = FMASD <float64> v9 v8 v10
+    v14 = VarDef <mem> {~r3} v1
+    v15 = MOVSDstore <mem> {~r3} v2 v13 v14
+    Ret v15
+  pass late copyelim begin
+  pass late copyelim end [606 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v13 = FMASD <float64> v9 v8 v10
+    v14 = VarDef <mem> {~r3} v1
+    v15 = MOVSDstore <mem> {~r3} v2 v13 v14
+    Ret v15
+  pass tighten begin
+  pass tighten end [429905 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v13 = FMASD <float64> v9 v8 v10
+    v14 = VarDef <mem> {~r3} v1
+    v15 = MOVSDstore <mem> {~r3} v2 v13 v14
+    Ret v15
+  pass phi tighten begin
+  pass phi tighten end [636 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v13 = FMASD <float64> v9 v8 v10
+    v14 = VarDef <mem> {~r3} v1
+    v15 = MOVSDstore <mem> {~r3} v2 v13 v14
+    Ret v15
+  pass late deadcode begin
+  pass late deadcode end [3804 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v13 = FMASD <float64> v9 v8 v10
+    v14 = VarDef <mem> {~r3} v1
+    v15 = MOVSDstore <mem> {~r3} v2 v13 v14
+    Ret v15
+  pass critical begin
+  pass critical end [1190 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v13 = FMASD <float64> v9 v8 v10
+    v14 = VarDef <mem> {~r3} v1
+    v15 = MOVSDstore <mem> {~r3} v2 v13 v14
+    Ret v15
+  pass likelyadjust begin
+  pass likelyadjust end [870 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v13 = FMASD <float64> v9 v8 v10
+    v14 = VarDef <mem> {~r3} v1
+    v15 = MOVSDstore <mem> {~r3} v2 v13 v14
+    Ret v15
+  pass layout begin
+  pass layout end [8956 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v13 = FMASD <float64> v9 v8 v10
+    v14 = VarDef <mem> {~r3} v1
+    v15 = MOVSDstore <mem> {~r3} v2 v13 v14
+    Ret v15
+  pass schedule begin
+  pass schedule end [13730 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v14 = VarDef <mem> {~r3} v1
+    v2 = SP <uintptr>
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v13 = FMASD <float64> v9 v8 v10
+    v15 = MOVSDstore <mem> {~r3} v2 v13 v14
+    Ret v15
+  pass late nilcheck begin
+  pass late nilcheck end [1894 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v14 = VarDef <mem> {~r3} v1
+    v2 = SP <uintptr>
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v13 = FMASD <float64> v9 v8 v10
+    v15 = MOVSDstore <mem> {~r3} v2 v13 v14
+    Ret v15
+  pass flagalloc begin
+  pass flagalloc end [8130 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v14 = VarDef <mem> {~r3} v1
+    v2 = SP <uintptr>
+    v8 = Arg <float64> {a}
+    v9 = Arg <float64> {b}
+    v10 = Arg <float64> {c}
+    v13 = FMASD <float64> v9 v8 v10
+    v15 = MOVSDstore <mem> {~r3} v2 v13 v14
+    Ret v15
+  pass regalloc begin
+  pass regalloc end [768591 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v14 = VarDef <mem> {~r3} v1
+    v2 = SP <uintptr> : SP
+    v8 = Arg <float64> {a} : a[float64]
+    v9 = Arg <float64> {b} : b[float64]
+    v10 = Arg <float64> {c} : c[float64]
+    v12 = LoadReg <float64> v9 : X0
+    v7 = LoadReg <float64> v8 : X1
+    v11 = LoadReg <float64> v10 : X2
+    v13 = FMASD <float64> v12 v7 v11 : X0
+    v15 = MOVSDstore <mem> {~r3} v2 v13 v14
+    Ret v15
+  pass loop rotate begin
+  pass loop rotate end [810 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v14 = VarDef <mem> {~r3} v1
+    v2 = SP <uintptr> : SP
+    v8 = Arg <float64> {a} : a[float64]
+    v9 = Arg <float64> {b} : b[float64]
+    v10 = Arg <float64> {c} : c[float64]
+    v12 = LoadReg <float64> v9 : X0
+    v7 = LoadReg <float64> v8 : X1
+    v11 = LoadReg <float64> v10 : X2
+    v13 = FMASD <float64> v12 v7 v11 : X0
+    v15 = MOVSDstore <mem> {~r3} v2 v13 v14
+    Ret v15
+  pass stackframe begin
+  pass stackframe end [16268 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v14 = VarDef <mem> {~r3} v1
+    v2 = SP <uintptr> : SP
+    v8 = Arg <float64> {a} : a[float64]
+    v9 = Arg <float64> {b} : b[float64]
+    v10 = Arg <float64> {c} : c[float64]
+    v12 = LoadReg <float64> v9 : X0
+    v7 = LoadReg <float64> v8 : X1
+    v11 = LoadReg <float64> v10 : X2
+    v13 = FMASD <float64> v12 v7 v11 : X0
+    v15 = MOVSDstore <mem> {~r3} v2 v13 v14
+    Ret v15
+  pass trim begin
+  pass trim end [815 ns]
+fusedMulAdd func(float64, float64, float64) float64
+  b1:
+    v1 = InitMem <mem>
+    v14 = VarDef <mem> {~r3} v1
+    v2 = SP <uintptr> : SP
+    v8 = Arg <float64> {a} : a[float64]
+    v9 = Arg <float64> {b} : b[float64]
+    v10 = Arg <float64> {c} : c[float64]
+    v12 = LoadReg <float64> v9 : X0
+    v7 = LoadReg <float64> v8 : X1
+    v11 = LoadReg <float64> v10 : X2
+    v13 = FMASD <float64> v12 v7 v11 : X0
+    v15 = MOVSDstore <mem> {~r3} v2 v13 v14
+    Ret v15
+genssa fusedMulAdd
+# example/example.go
+       	00000 (3)	TEXT	"".fusedMulAdd(SB)
+       	00001 (3)	FUNCDATA	$0, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
+       	00002 (3)	FUNCDATA	$1, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
+       	00003 (3)	FUNCDATA	$3, gclocals·33cdeccccebe80329f1fdbee7f5874cb(SB)
+ v12   	00004 (4)	PCDATA	$2, $0
+ v12   	00005 (4)	PCDATA	$0, $0
+ v12   	00006 (4)	MOVSD	"".b+8(SP), X0
+ v7    	00007 (4)	MOVSD	"".a(SP), X1
+ v11   	00008 (4)	MOVSD	"".c+16(SP), X2
+ v13   	00009 (4)	VFMADD231SD	X2, X1, X0
+ v15   	00010 (4)	MOVSD	X0, "".~r3+24(SP)
+ b1    	00011 (4)	RET
+       	00012 (?)	END
