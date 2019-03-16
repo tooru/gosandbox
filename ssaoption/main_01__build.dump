@@ -1,0 +1,21 @@
+main func()
+  b1:
+    v1 = InitMem <mem>
+    v2 = SP <uintptr>
+    v3 = SB <uintptr>
+    v4 = OffPtr <**byte> [0] v2
+    v5 = Addr <*uint8> {type.int64} v3
+    v6 = Store <mem> {*byte} v4 v5 v1
+    v7 = StaticCall <mem> {runtime.newobject} [16] v6
+    v8 = OffPtr <**int64> [8] v2
+    v9 = Load <*int64> v8 v7 (&a[*int64])
+    v10 = Const64 <int64> [1]
+    v11 = Store <mem> {int64} v9 v10 v7
+    v12 = OffPtr <**int64> [0] v2
+    v13 = Store <mem> {*int64} v12 v9 v11
+    v14 = OffPtr <*int64> [8] v2
+    v15 = Const64 <int64> [2]
+    v16 = Store <mem> {int64} v14 v15 v13
+    v17 = StaticCall <mem> {sync/atomic.StoreInt64} [16] v16
+    Ret v17
+name &a[*int64]: [v9]
