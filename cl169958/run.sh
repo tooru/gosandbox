@@ -1,6 +1,13 @@
 #!/bin/sh
 
-docker build . -t cl169958
+TAG=cl169958
 
-docker run cl169958 go run /root/main.go
-docker run cl169958 /root/go/bin/go run /root/main.go
+docker build . -t $TAG
+
+docker run $TAG go version
+docker run $TAG go run /root/main.go
+
+echo
+
+docker run $TAG /root/go/bin/go version
+docker run $TAG /root/go/bin/go run /root/main.go
