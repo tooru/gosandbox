@@ -1,5 +1,7 @@
 package main
 
+//go:generate statik
+
 import (
 	"io"
 	"log"
