@@ -2,6 +2,7 @@
 package cat
 
 import (
+	"fmt"
 	"testing"
 )
 
@@ -33,3 +34,27 @@ func BenchmarkSb100(b *testing.B)    { bench(b, 10, sb) }
 func BenchmarkCat10000(b *testing.B) { bench(b, 10000, cat) }
 func BenchmarkBuf10000(b *testing.B) { bench(b, 10000, buf) }
 func BenchmarkSb10000(b *testing.B)  { bench(b, 10000, sb) }
+
+func BenchmarkConcatenate(b *testing.B) {
+	benchCases := []struct {
+		name string
+		n    int
+		f    func(...string) string
+	}{
+		{"Cat", 3, cat},
+		{"Buf", 3, buf},
+		{"Sb", 3, sb},
+		{"Cat", 100, cat},
+		{"Buf", 100, buf},
+		{"Sb", 100, sb},
+		{"Cat", 10000, cat},
+		{"Buf", 10000, buf},
+		{"Sb", 10000, sb},
+	}
+	for _, c := range benchCases {
+		b.Run(fmt.Sprintf("%s%d", c.name, c.n),
+			func(b *testing.B) {
+				bench(b, c.n, c.f)
+			})
+	}
+}
