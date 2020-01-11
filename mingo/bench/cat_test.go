@@ -26,7 +26,10 @@ func bench(b *testing.B, n int, f func(...string) string) {
 }
 func BenchmarkCat3(b *testing.B)     { bench(b, 3, cat) }
 func BenchmarkBuf3(b *testing.B)     { bench(b, 3, buf) }
+func BenchmarkSb3(b *testing.B)      { bench(b, 3, sb) }
 func BenchmarkCat100(b *testing.B)   { bench(b, 10, cat) }
 func BenchmarkBuf100(b *testing.B)   { bench(b, 10, buf) }
+func BenchmarkSb100(b *testing.B)    { bench(b, 10, sb) }
 func BenchmarkCat10000(b *testing.B) { bench(b, 10000, cat) }
 func BenchmarkBuf10000(b *testing.B) { bench(b, 10000, buf) }
+func BenchmarkSb10000(b *testing.B)  { bench(b, 10000, sb) }
